@@ -8,26 +8,19 @@ import './App.css';
 function App() {
   return (
     <div style={{ textAlign: "center", marginTop: "00px" }}>
-		<div style={{display:'flex', flexDirection:'row', alignItems:'center', marginLeft:'10px'}}>
-			<img
-				src="/image_four.png"
-				alt="Urban Odyssey 1"
-				style={{
-					width: "100px",
-					height: "100px",
-					borderRadius: 60
-				}}
-			/>
-			<div style={{marginLeft:10}}>
-				<div style={{ textAlign:'left', marginBottom:20, paddingLeft:10, fontSize: "35px", marginTop: "20px" }}>
+		<div style={{display:'flex', flexDirection:'row', alignItems:'center', marginLeft:'10px', marginRight:'10px'}}>
+			
+			<div style={{display:'flex', marginTop:10, marginBottom:20, width:'100%', flexDirection:'row', alignItems:'center'}}>
+				<div style={{display:'flex', flex:1, textAlign:'left', fontSize: "35px"}}>
 					Urban Odyssey
 				</div>
 				<div 
 					style={{ 
 						display: "flex", 
-						justifyContent: "left", 
+						
 						gap: "25px", 
-						marginBottom: "20px" ,
+					
+						
 						paddingLeft:10,
 					}}
 				>
@@ -54,7 +47,7 @@ function App() {
     alignItems: "center",
   
     gap: 10,
-    fontSize: "25px",
+    fontSize: "23px",
     fontWeight: "600",
     marginTop: "20px",
     marginBottom: "20px",
@@ -91,7 +84,7 @@ function App() {
       style={{ width: "300px" }}
     />
   </div>
-     <div style={{ textAlign:'left', marginBottom:20, paddingLeft:10, fontSize: "25px", marginTop: "20px" }}>
+     <div style={{ textAlign:'left', marginBottom:20, paddingLeft:10, fontSize: "20px", marginTop: "20px" }}>
 					Collections
 				</div>
       <div style={{ 
