@@ -30,9 +30,32 @@ function App() {
         </a>
 
       </div>
-      <div style={{ textAlign:'left', paddingLeft:10, fontSize: "25px", fontWeight:'600', marginTop: "20px", marginBottom: "20px" }}>
-        Winter 2025 Collection
-      </div>
+     <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+  
+    gap: 10,
+    fontSize: "25px",
+    fontWeight: "600",
+    marginTop: "20px",
+    marginBottom: "20px",
+     marginLeft: "10px"
+  }}
+>
+  <img
+    src="/image.png"
+    alt="Urban Odyssey 1"
+    style={{
+      width: "25px",
+      height: "25px",
+      borderRadius: 30
+    }}
+  />
+
+  Winter 2025 Collection
+</div>
+
      <div className="image-row">
     <img
       src="/image.png"
