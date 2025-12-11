@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
-import { Instagram, ShoppingBag } from "lucide-react";
+import { Instagram, ShoppingBag, Search } from "lucide-react";
 
 import './App.css';
 
@@ -8,7 +8,42 @@ import './App.css';
 function App() {
   return (
     <div style={{ textAlign: "center", marginTop: "00px" }}>
+		<div style={{display:'flex', flexDirection:'row', alignItems:'center', marginLeft:'10px', marginRight:'10px'}}>
+			
+			<div style={{display:'flex', marginTop:10, marginBottom:0, width:'100%', flexDirection:'row', alignItems:'center'}}>
+				
+				<div 
+					style={{ 
+						display: "flex", 
+						
+						gap: "25px", 
+					
+						flex:1,
+					
+					}}
+				>
+					
+					<a
+						href="https://www.instagram.com/theurban_odyssey/?hl=en"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<Instagram size={24} color="black" />
+					</a>
 		
+		        
+					<a href="#" target="_blank" rel="noopener noreferrer">
+						<ShoppingBag size={24} color="black" />
+					</a>
+		
+				</div>
+				<div>
+				<a href="#" target="_blank" rel="noopener noreferrer">
+						<Search size={24} color="black" />
+					</a>
+				</div>
+		     </div>
+		</div>
      <div
   style={{
     display: "flex",
@@ -96,37 +131,6 @@ function App() {
 		    </div>
 		</div>
       </div>
-      <div style={{display:'flex', flexDirection:'row', alignItems:'center', marginLeft:'10px', marginRight:'10px'}}>
-			
-			<div style={{display:'flex', marginTop:0, marginBottom:0, width:'100%', flexDirection:'row', alignItems:'center'}}>
-				
-				<div 
-					style={{ 
-						display: "flex", 
-						
-						gap: "25px", 
-					
-						
-					
-					}}
-				>
-					
-					<a
-						href="https://www.instagram.com/theurban_odyssey/?hl=en"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<Instagram size={24} color="black" />
-					</a>
-		
-		        
-					<a href="#" target="_blank" rel="noopener noreferrer">
-						<ShoppingBag size={24} color="black" />
-					</a>
-		
-				</div>
-		     </div>
-		</div>
     </div>
   );
 }
