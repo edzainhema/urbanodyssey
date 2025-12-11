@@ -1,8 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
-import { FaInstagram } from "react-icons/fa";
-import { FaTiktok } from "react-icons/fa6";
-import { SiShopify } from "react-icons/si";
+import { Instagram, ShoppingBag } from "lucide-react";
 
 import './App.css';
 
@@ -22,15 +20,12 @@ function App() {
   target="_blank"
   rel="noopener noreferrer"
 >
-          <FaInstagram size={20} color="black" />
+          <Instagram size={24} color="black" />
         </a>
 
-        <a href="https://www.tiktok.com/@theurban_odyssey/video/7566878713829264647?q=the%20urban%20odyssey&t=1765431505718" target="_blank" rel="noopener noreferrer">
-          <FaTiktok size={20} color="black" />
-        </a>
-
+        
         <a href="#" target="_blank" rel="noopener noreferrer">
-          <SiShopify size={20} color="black" />
+          <ShoppingBag size={24} color="black" />
         </a>
 
       </div>
