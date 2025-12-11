@@ -24,6 +24,23 @@
   color: white;
 }
 
+.image-row {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding-bottom: 10px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+
+  /* Hide scrollbar */
+  scrollbar-width: none;       /* Firefox */
+}
+
+.image-row::-webkit-scrollbar {
+  display: none;               /* Chrome, Edge, Safari */
+}
+
 .App-link {
   color: #61dafb;
 }

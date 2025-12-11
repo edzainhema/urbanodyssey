@@ -16,10 +16,10 @@ function App() {
       }}>
         
         <a
-  href="https://www.instagram.com/theurban_odyssey/?hl=en"
-  target="_blank"
-  rel="noopener noreferrer"
->
+			href="https://www.instagram.com/theurban_odyssey/?hl=en"
+			target="_blank"
+			rel="noopener noreferrer"
+		>
           <Instagram size={24} color="black" />
         </a>
 
@@ -32,11 +32,23 @@ function App() {
       <div style={{ fontSize: "25px", fontWeight:'600', marginTop: "20px", marginBottom: "20px" }}>
         Winter 2025 Collection
       </div>
-      <img 
-        src="/image.png" 
-        alt="Urban Odyssey" 
-        style={{ width: "300px" }} 
-      />
+     <div className="image-row">
+    <img
+      src="/image.png"
+      alt="Urban Odyssey 1"
+      style={{ width: "300px" }}
+    />
+    <img
+      src="/image_two.png"
+      alt="Urban Odyssey 2"
+      style={{ width: "300px" }}
+    />
+    <img
+      src="/image_three.png"
+      alt="Urban Odyssey 3"
+      style={{ width: "300px" }}
+    />
+  </div>
       <div style={{ fontSize: "35px", marginTop: "20px" }}>
         Urban Odyssey
       </div>
