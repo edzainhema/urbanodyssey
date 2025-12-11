@@ -102,7 +102,7 @@ function App() {
       style={{ width: "300px" }}
     />
   </div>
-  <div style={{marginTop:10, display:'flex', fontWeight:400, marginLeft:10, flex:1, textAlign:'left', fontSize: "30px"}}>
+  <div style={{marginTop:10, display:'flex', fontWeight:400, marginLeft:10, flex:1, textAlign:'left', fontSize: "35px"}}>
 					Urban Odyssey
 				</div>
      
