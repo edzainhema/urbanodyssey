@@ -65,8 +65,8 @@ function App() {
     alignItems: "center",
   
     gap: 10,
-    fontSize: "25px",
-    fontWeight: "500",
+    fontSize: "23px",
+    fontWeight: "400",
     marginTop: "20px",
     marginBottom: "20px",
      marginLeft: "10px"
@@ -102,7 +102,7 @@ function App() {
       style={{ width: "300px" }}
     />
   </div>
-  <div style={{marginTop:10, display:'flex', fontWeight:400, marginLeft:10, flex:1, textAlign:'left', fontSize: "35px"}}>
+  <div style={{marginTop:10, display:'flex', fontWeight:400, marginLeft:10, flex:1, textAlign:'left', fontSize: "30px"}}>
 					Urban Odyssey
 				</div>
      
