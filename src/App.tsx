@@ -10,7 +10,7 @@ function App() {
     <div style={{ textAlign: "center", marginTop: "00px" }}>
 		<div style={{display:'flex', flexDirection:'row', alignItems:'center', marginLeft:'10px'}}>
 			<img
-				src="/image.png"
+				src="/image_four.png"
 				alt="Urban Odyssey 1"
 				style={{
 					width: "100px",
@@ -120,7 +120,7 @@ function App() {
 		</div>
 		<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
 		    <img
-		      src="/image_two.png"
+		      src="/image_five.png"
 		      alt="Urban Odyssey 1"
 		      style={{
 		        width: "60px",
