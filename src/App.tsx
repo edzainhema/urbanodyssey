@@ -66,7 +66,7 @@ function App() {
   
     gap: 10,
     fontSize: "23px",
-    fontWeight: "400",
+    fontWeight: "500",
     marginTop: "20px",
     marginBottom: "20px",
      marginLeft: "10px"
