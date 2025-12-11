@@ -10,10 +10,8 @@ function App() {
     <div style={{ textAlign: "center", marginTop: "00px" }}>
 		<div style={{display:'flex', flexDirection:'row', alignItems:'center', marginLeft:'10px', marginRight:'10px'}}>
 			
-			<div style={{display:'flex', marginTop:10, marginBottom:20, width:'100%', flexDirection:'row', alignItems:'center'}}>
-				<div style={{display:'flex', flex:1, textAlign:'left', fontSize: "35px"}}>
-					Urban Odyssey
-				</div>
+			<div style={{display:'flex', marginTop:10, marginBottom:0, width:'100%', flexDirection:'row', alignItems:'center'}}>
+				
 				<div 
 					style={{ 
 						display: "flex", 
@@ -21,7 +19,7 @@ function App() {
 						gap: "25px", 
 					
 						
-						paddingLeft:10,
+						
 					}}
 				>
 					
@@ -84,8 +82,8 @@ function App() {
       style={{ width: "300px" }}
     />
   </div>
-     <div style={{ textAlign:'left', marginBottom:20, paddingLeft:10, fontSize: "20px", marginTop: "20px" }}>
-					Collections
+     <div style={{ textAlign:'left', marginBottom:20, paddingLeft:10, fontSize: "35px", marginTop: "20px" }}>
+					Urban Odyssey
 				</div>
       <div style={{ 
         display: "flex", 
