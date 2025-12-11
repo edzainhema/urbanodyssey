@@ -84,14 +84,12 @@ function App() {
       style={{ width: "300px" }}
     />
   </div>
-     <div style={{display:'flex', fontWeight:400, marginLeft:10, flex:1, textAlign:'left', fontSize: "20px"}}>
-					Collections
-				</div>
+ 
       <div style={{ 
         display: "flex", 
         justifyContent: "left", 
         gap: "25px", 
-        marginTop: "20px" ,
+        marginTop: "30px" ,
         marginBottom: "20px" ,
         paddingLeft:10,
       }}>
