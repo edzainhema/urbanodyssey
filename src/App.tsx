@@ -50,9 +50,9 @@ function App() {
     alignItems: "center",
   
     gap: 10,
-    fontSize: "20px",
-    fontWeight: "400",
-    marginTop: "10px",
+    fontSize: "25px",
+    fontWeight: "500",
+    marginTop: "20px",
     marginBottom: "20px",
      marginLeft: "10px"
   }}
