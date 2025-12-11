@@ -11,14 +11,33 @@ function App() {
 		<div style={{display:'flex', flexDirection:'row', alignItems:'center', marginLeft:'10px', marginRight:'10px'}}>
 			
 			<div style={{display:'flex', marginTop:10, marginBottom:0, width:'100%', flexDirection:'row', alignItems:'center'}}>
-				
+				<div
+					style={{ 
+					
+						display: "flex", 
+						flex:1,
+					
+					}}
+				>
+				<a href="#" target="_blank" rel="noopener noreferrer">
+						 <img
+		      src="/image_six.png"
+		      alt="Urban Odyssey 1"
+		      style={{
+		        width: "30px",
+		        height: "30px",
+		        borderRadius: 30,
+		      }}
+		    />
+					</a>
+				</div>
 				<div 
 					style={{ 
 						display: "flex", 
 						
 						gap: "25px", 
 					
-						flex:1,
+						
 					
 					}}
 				>
@@ -37,11 +56,7 @@ function App() {
 					</a>
 		
 				</div>
-				<div>
-				<a href="#" target="_blank" rel="noopener noreferrer">
-						<Search size={24} color="black" />
-					</a>
-				</div>
+				
 		     </div>
 		</div>
      <div
