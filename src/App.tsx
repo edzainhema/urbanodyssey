@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
-import { Instagram, ShoppingBag, Search } from "lucide-react";
+import { Instagram, ShoppingBag } from "lucide-react";
 
 import './App.css';
 
@@ -10,26 +10,9 @@ function App() {
     <div style={{ textAlign: "center", marginTop: "00px" }}>
 		<div style={{display:'flex', flexDirection:'row', alignItems:'center', marginLeft:'10px', marginRight:'10px'}}>
 			
-			<div style={{display:'flex', marginTop:10, marginBottom:0, width:'100%', flexDirection:'row', alignItems:'center'}}>
-				<div
-					style={{ 
-					
-						display: "flex", 
-						flex:1,
-					
-					}}
-				>
-				<a href="#" target="_blank" rel="noopener noreferrer">
-						 <img
-		      src="/image_six.png"
-		      alt="Urban Odyssey 1"
-		      style={{
-		        width: "30px",
-		        height: "30px",
-		        borderRadius: 30,
-		      }}
-		    />
-					</a>
+			<div style={{display:'flex', marginTop:10, marginBottom:20, width:'100%', flexDirection:'row', alignItems:'center'}}>
+				<div style={{display:'flex', fontWeight:400, flex:1, textAlign:'left', fontSize: "30px"}}>
+					Urban Odyssey
 				</div>
 				<div 
 					style={{ 
@@ -38,7 +21,7 @@ function App() {
 						gap: "25px", 
 					
 						
-					
+						paddingLeft:10,
 					}}
 				>
 					
@@ -56,7 +39,6 @@ function App() {
 					</a>
 		
 				</div>
-				
 		     </div>
 		</div>
      <div
@@ -66,7 +48,7 @@ function App() {
   
     gap: 10,
     fontSize: "23px",
-    fontWeight: "500",
+    fontWeight: "400",
     marginTop: "20px",
     marginBottom: "20px",
      marginLeft: "10px"
@@ -102,15 +84,12 @@ function App() {
       style={{ width: "300px" }}
     />
   </div>
-  <div style={{marginTop:10, display:'flex', fontWeight:400, marginLeft:10, flex:1, textAlign:'left', fontSize: "35px"}}>
-					Urban Odyssey
-				</div>
      
       <div style={{ 
         display: "flex", 
         justifyContent: "left", 
         gap: "25px", 
-        marginTop: "20px" ,
+        marginTop: "40px" ,
         marginBottom: "20px" ,
         paddingLeft:10,
       }}>
