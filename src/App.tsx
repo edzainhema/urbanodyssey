@@ -11,7 +11,7 @@ function App() {
 		<div style={{display:'flex', flexDirection:'row', alignItems:'center', marginLeft:'10px', marginRight:'10px'}}>
 			
 			<div style={{display:'flex', marginTop:10, marginBottom:20, width:'100%', flexDirection:'row', alignItems:'center'}}>
-				<div style={{display:'flex', fontWeight:400, flex:1, textAlign:'left', fontSize: "30px"}}>
+				<div style={{display:'flex', fontWeight:600, flex:1, textAlign:'left', fontSize: "27px"}}>
 					Urban Odyssey
 				</div>
 				<div 
