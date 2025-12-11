@@ -13,13 +13,13 @@ function App() {
 				src="/image.png"
 				alt="Urban Odyssey 1"
 				style={{
-					width: "60px",
-					height: "60px",
-					borderRadius: 30
+					width: "100px",
+					height: "100px",
+					borderRadius: 60
 				}}
 			/>
 			<div style={{marginLeft:10}}>
-				<div style={{ textAlign:'left', paddingLeft:10, fontSize: "35px", marginTop: "20px" }}>
+				<div style={{ textAlign:'left', marginBottom:20, paddingLeft:10, fontSize: "35px", marginTop: "20px" }}>
 					Urban Odyssey
 				</div>
 				<div 
@@ -91,7 +91,9 @@ function App() {
       style={{ width: "300px" }}
     />
   </div>
-     
+     <div style={{ textAlign:'left', marginBottom:20, paddingLeft:10, fontSize: "25px", marginTop: "20px" }}>
+					Collections
+				</div>
       <div style={{ 
         display: "flex", 
         justifyContent: "left", 
