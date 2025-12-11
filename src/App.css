@@ -30,16 +30,17 @@
   gap: 15px;
   padding-bottom: 10px;
   width: 100%;
-  align-items: center;
-  justify-content: center;
+
+  /* Allow scrolling both directions */
+  scroll-behavior: smooth;
 
   /* Hide scrollbar */
-  scrollbar-width: none;       /* Firefox */
+  scrollbar-width: none;         
+}
+.image-row::-webkit-scrollbar {
+  display: none;
 }
 
-.image-row::-webkit-scrollbar {
-  display: none;               /* Chrome, Edge, Safari */
-}
 
 .App-link {
   color: #61dafb;
