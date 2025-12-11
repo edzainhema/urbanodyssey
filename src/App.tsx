@@ -8,48 +8,16 @@ import './App.css';
 function App() {
   return (
     <div style={{ textAlign: "center", marginTop: "00px" }}>
-		<div style={{display:'flex', flexDirection:'row', alignItems:'center', marginLeft:'10px', marginRight:'10px'}}>
-			
-			<div style={{display:'flex', marginTop:10, marginBottom:20, width:'100%', flexDirection:'row', alignItems:'center'}}>
-				<div style={{display:'flex', fontWeight:400, flex:1, textAlign:'left', fontSize: "30px"}}>
-					Urban Odyssey
-				</div>
-				<div 
-					style={{ 
-						display: "flex", 
-						
-						gap: "25px", 
-					
-						
-						paddingLeft:10,
-					}}
-				>
-					
-					<a
-						href="https://www.instagram.com/theurban_odyssey/?hl=en"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<Instagram size={24} color="black" />
-					</a>
 		
-		        
-					<a href="#" target="_blank" rel="noopener noreferrer">
-						<ShoppingBag size={24} color="black" />
-					</a>
-		
-				</div>
-		     </div>
-		</div>
      <div
   style={{
     display: "flex",
     alignItems: "center",
   
     gap: 10,
-    fontSize: "23px",
+    fontSize: "20px",
     fontWeight: "400",
-    marginTop: "20px",
+    marginTop: "10px",
     marginBottom: "20px",
      marginLeft: "10px"
   }}
@@ -84,12 +52,15 @@ function App() {
       style={{ width: "300px" }}
     />
   </div>
+  <div style={{marginTop:10, display:'flex', fontWeight:400, marginLeft:10, flex:1, textAlign:'left', fontSize: "35px"}}>
+					Urban Odyssey
+				</div>
      
       <div style={{ 
         display: "flex", 
         justifyContent: "left", 
         gap: "25px", 
-        marginTop: "40px" ,
+        marginTop: "20px" ,
         marginBottom: "20px" ,
         paddingLeft:10,
       }}>
@@ -125,6 +96,37 @@ function App() {
 		    </div>
 		</div>
       </div>
+      <div style={{display:'flex', flexDirection:'row', alignItems:'center', marginLeft:'10px', marginRight:'10px'}}>
+			
+			<div style={{display:'flex', marginTop:0, marginBottom:0, width:'100%', flexDirection:'row', alignItems:'center'}}>
+				
+				<div 
+					style={{ 
+						display: "flex", 
+						
+						gap: "25px", 
+					
+						
+					
+					}}
+				>
+					
+					<a
+						href="https://www.instagram.com/theurban_odyssey/?hl=en"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<Instagram size={24} color="black" />
+					</a>
+		
+		        
+					<a href="#" target="_blank" rel="noopener noreferrer">
+						<ShoppingBag size={24} color="black" />
+					</a>
+		
+				</div>
+		     </div>
+		</div>
     </div>
   );
 }
