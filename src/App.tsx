@@ -10,9 +10,10 @@ function App() {
     <div style={{ textAlign: "center", marginTop: "40px" }}>
       <div style={{ 
         display: "flex", 
-        justifyContent: "center", 
+        justifyContent: "left", 
         gap: "25px", 
-        marginBottom: "20px" 
+        marginBottom: "20px" ,
+        paddingLeft:10,
       }}>
         
         <a
@@ -29,14 +30,14 @@ function App() {
         </a>
 
       </div>
-      <div style={{ fontSize: "25px", fontWeight:'600', marginTop: "20px", marginBottom: "20px" }}>
+      <div style={{ textAlign:'left', paddingLeft:10, fontSize: "25px", fontWeight:'600', marginTop: "20px", marginBottom: "20px" }}>
         Winter 2025 Collection
       </div>
      <div className="image-row">
     <img
       src="/image.png"
       alt="Urban Odyssey 1"
-      style={{ width: "300px", marginLeft: 15 }}
+      style={{ width: "300px" }}
     />
     <img
       src="/image_two.png"
@@ -49,7 +50,7 @@ function App() {
       style={{ width: "300px" }}
     />
   </div>
-      <div style={{ fontSize: "35px", marginTop: "20px" }}>
+      <div style={{ textAlign:'left', paddingLeft:10, fontSize: "35px", marginTop: "20px" }}>
         Urban Odyssey
       </div>
     </div>
