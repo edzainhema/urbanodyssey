@@ -76,6 +76,46 @@ function App() {
       <div style={{ textAlign:'left', paddingLeft:10, fontSize: "35px", marginTop: "20px" }}>
         Urban Odyssey
       </div>
+      <div style={{ 
+        display: "flex", 
+        justifyContent: "left", 
+        gap: "25px", 
+        marginTop: "10px" ,
+        marginBottom: "20px" ,
+        paddingLeft:10,
+      }}>
+        
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+		    <img
+		      src="/image.png"
+		      alt="Urban Odyssey 1"
+		      style={{
+		        width: "40px",
+		        height: "40px",
+		        borderRadius: 30,
+		      }}
+		    />
+
+		    <div style={{ fontSize: "12px", marginTop: "5px"}}>
+		      Winter 2025
+		    </div>
+		</div>
+		<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+		    <img
+		      src="/image_two.png"
+		      alt="Urban Odyssey 1"
+		      style={{
+		        width: "40px",
+		        height: "40px",
+		        borderRadius: 30,
+		      }}
+		    />
+
+		    <div style={{ fontSize: "12px", marginTop: "5px" }}>
+		      Summer 2025
+		    </div>
+		</div>
+      </div>
     </div>
   );
 }
