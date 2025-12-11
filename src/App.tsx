@@ -36,7 +36,7 @@ function App() {
     <img
       src="/image.png"
       alt="Urban Odyssey 1"
-      style={{ width: "300px" }}
+      style={{ width: "300px", marginLeft: 15 }}
     />
     <img
       src="/image_two.png"
