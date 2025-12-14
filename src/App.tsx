@@ -9,6 +9,7 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "./HomePage";
 import Item from "./Item";
 import CreateItem from "./CreateItem";
+import CreateCollection from "./CreateCollection";
 
 const stripePromise = loadStripe(
   process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY!
