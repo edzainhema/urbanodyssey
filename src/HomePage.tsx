@@ -54,7 +54,7 @@ export default function HomePage() {
 
       <div 
 		style={{ fontSize: 35, marginLeft: 10, textAlign: "left" }}
-		onClick={() => navigate("/create-item",)}
+		onClick={() => navigate("/create-collection",)}
 	>
         
 		Urban Odyssey

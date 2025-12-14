@@ -21,6 +21,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/item" element={<Item />} />
         <Route path="/create-item" element={<CreateItem />} />
+        <Route path="/create-collection" element={<CreateCollection />} />
       </Routes>
     </Elements>
   );
