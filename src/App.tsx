@@ -10,6 +10,7 @@ import HomePage from "./HomePage";
 import Item from "./Item";
 import CreateItem from "./CreateItem";
 import CreateCollection from "./CreateCollection";
+import CollectionPage from "./Collection";
 
 const stripePromise = loadStripe(
   process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY!
@@ -23,6 +24,8 @@ function App() {
         <Route path="/item" element={<Item />} />
         <Route path="/create-item" element={<CreateItem />} />
         <Route path="/create-collection" element={<CreateCollection />} />
+		<Route path="/collections/:id" element={<CollectionPage />} />
+
       </Routes>
     </Elements>
   );
