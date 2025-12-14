@@ -35,20 +35,19 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
 
   /* ----------------------------
-     Fetch collections + latest items
+     Fetch data
   ----------------------------- */
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
 
-      // 1) Fetch all collections (newest first)
       const { data: collectionsData, error: collectionsError } =
         await supabase
           .from("collections")
           .select("id, name, image_urls, description, created_at")
           .order("created_at", { ascending: false });
 
-      if (collectionsError || !collectionsData) {
+      if (collectionsError || !collectionsData || collectionsData.length === 0) {
         console.error(collectionsError);
         setLoading(false);
         return;
@@ -56,23 +55,15 @@ export default function HomePage() {
 
       setCollections(collectionsData);
 
-      if (collectionsData.length === 0) {
-        setLoading(false);
-        return;
-      }
-
-      // 2) Latest collection = first one
       const latest = collectionsData[0];
       setLatestCollection(latest);
 
-      // 3) Fetch items for latest collection
-      const { data: itemsData, error: itemsError } =
-        await supabase
-          .from("items")
-          .select("id, name, price, image_urls")
-          .eq("collection_id", latest.id);
+      const { data: itemsData } = await supabase
+        .from("items")
+        .select("id, name, price, image_urls")
+        .eq("collection_id", latest.id);
 
-      if (!itemsError && itemsData) {
+      if (itemsData) {
         setLatestItems(itemsData);
       }
 
@@ -83,128 +74,54 @@ export default function HomePage() {
   }, []);
 
   /* ----------------------------
-     Loading / empty states
+     States
   ----------------------------- */
   if (loading) {
     return <div style={{ padding: 20 }}>Loading…</div>;
   }
 
   if (!latestCollection) {
-  return (
-    <div style={{ padding: 20 }}>
-      <p>No collections yet.</p>
-
-      <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
+    return (
+      <div style={{ padding: 20 }}>
+        <p>No collections yet.</p>
         <button onClick={() => navigate("/create-collection")}>
           Create Collection
         </button>
-
-        <button onClick={() => navigate("/create-item")}>
-          Create Item
-        </button>
       </div>
-    </div>
-  );
-}
-
+    );
+  }
 
   /* ----------------------------
      UI
   ----------------------------- */
   return (
-    <div style={{ textAlign: "center" }}>
+    <div>
       {/* HEADER */}
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
-          padding: 10,
+          padding: "12px 14px",
         }}
       >
-        <img src="/image_six.png" style={{ width: 30 }} />
-        <Instagram size={24} />
+        <img src="/image_six.png" style={{ width: 28 }} />
+        <Instagram size={20} />
       </div>
 
-     {/* ITEMS */}
-<div
-  style={{
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)", // 👈 always 2 columns on mobile
-    gap: 12,
-    padding: 10,
-  }}
->
-  {latestItems.map((item) => (
-    <div
-      key={item.id}
-      style={{
-        cursor: "pointer",
-      }}
-      onClick={() => navigate("/item", { state: { item } })}
-    >
-      {item.image_urls.length > 0 && (
-        <img
-          src={item.image_urls[0]}
-          alt={item.name}
-          style={{
-            width: "100%",
-            aspectRatio: "3 / 4", // 👈 fashion-friendly
-            objectFit: "cover",
-            borderRadius: 0,
-          }}
-        />
-      )}
-
-      <div style={{ marginTop: 6, fontWeight: 600 }}>
-        {item.name}
-      </div>
-      <div>${item.price}</div>
-    </div>
-  ))}
-</div>
-
-
-      {/* LATEST COLLECTION */}
-      <div style={{display:'flex', flexDirection:'row'}}>
-		
-      <div
-        style={{
-          textAlign: "left",
-          fontSize: 23,
-          marginLeft: 10,
-          marginBottom: 12,
-        }}
-      >
-        {latestCollection.name}
-      </div>
-	</div>
-      {/* COLLECTION IMAGES */}
-      {latestCollection.image_urls.length > 0 && (
-        <div className="image-row">
-          {latestCollection.image_urls.map((url, i) => (
-            <img key={i} src={url} style={{ width: 300,  borderRadius:0, }} />
-          ))}
-        </div>
-      )}
-      
-      
-
-      
-		
-		 {/* COLLECTIONS STRIP */}
+      {/* COLLECTION STRIP */}
       <div
         style={{
           display: "flex",
-          gap: 16,
-          padding: "10px 10px 20px",
+          gap: 18,
+          padding: "14px 12px",
           overflowX: "auto",
         }}
       >
         {collections.map((collection) => (
           <div
             key={collection.id}
-            style={{ cursor: "pointer" }}
             onClick={() => navigate(`/collections/${collection.id}`)}
+            style={{ cursor: "pointer", textAlign: "center" }}
           >
             <img
               src={collection.image_urls[0]}
@@ -224,19 +141,104 @@ export default function HomePage() {
           </div>
         ))}
       </div>
-      {/* ADMIN LINKS */}
+
+      {/* LATEST COLLECTION TITLE */}
       <div
-        style={{ fontSize: 20, marginLeft: 10, textAlign: "left" }}
-        onClick={() => navigate("/create-item")}
+        style={{
+          fontSize: 22,
+          fontWeight: 500,
+          margin: "12px 12px 8px",
+          textAlign: "left",
+        }}
       >
-        Create Item
+        {latestCollection.name}
       </div>
 
+      {/* COLLECTION IMAGES (EDITORIAL GRID) */}
+      {latestCollection.image_urls.length > 0 && (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gap: 6,
+            padding: "0 10px 16px",
+          }}
+        >
+          {latestCollection.image_urls.map((url, i) => (
+            <img
+              key={i}
+              src={url}
+              alt={latestCollection.name}
+              style={{
+                width: "100%",
+                aspectRatio: "3 / 4",
+                objectFit: "cover",
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* ITEMS GRID */}
       <div
-        style={{ fontSize: 20, marginLeft: 10, textAlign: "left" }}
-        onClick={() => navigate("/create-collection")}
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: 14,
+          padding: "10px",
+        }}
       >
-        Create Collection
+        {latestItems.map((item) => (
+          <div
+            key={item.id}
+            onClick={() => navigate("/item", { state: { item } })}
+            style={{ cursor: "pointer" }}
+          >
+            <img
+              src={item.image_urls[0]}
+              alt={item.name}
+              style={{
+                width: "100%",
+                aspectRatio: "3 / 4",
+                objectFit: "cover",
+              }}
+            />
+
+            <div
+              style={{
+                marginTop: 6,
+                fontSize: 14,
+                fontWeight: 500,
+              }}
+            >
+              {item.name}
+            </div>
+
+            <div
+              style={{
+                fontSize: 13,
+                opacity: 0.8,
+              }}
+            >
+              ${item.price}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* ADMIN (SUBTLE) */}
+      <div
+        style={{
+          fontSize: 13,
+          opacity: 0.5,
+          padding: 12,
+          textAlign: "left",
+        }}
+      >
+        <div onClick={() => navigate("/create-item")}>Create Item</div>
+        <div onClick={() => navigate("/create-collection")}>
+          Create Collection
+        </div>
       </div>
     </div>
   );
