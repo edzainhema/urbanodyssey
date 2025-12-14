@@ -90,8 +90,23 @@ export default function HomePage() {
   }
 
   if (!latestCollection) {
-    return <div style={{ padding: 20 }}>No collections yet.</div>;
-  }
+  return (
+    <div style={{ padding: 20 }}>
+      <p>No collections yet.</p>
+
+      <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
+        <button onClick={() => navigate("/create-collection")}>
+          Create Collection
+        </button>
+
+        <button onClick={() => navigate("/create-item")}>
+          Create Item
+        </button>
+      </div>
+    </div>
+  );
+}
+
 
   /* ----------------------------
      UI
@@ -110,39 +125,7 @@ export default function HomePage() {
         <Instagram size={24} />
       </div>
 
-      {/* COLLECTIONS STRIP */}
-      <div
-        style={{
-          display: "flex",
-          gap: 16,
-          padding: "10px 10px 20px",
-          overflowX: "auto",
-        }}
-      >
-        {collections.map((collection) => (
-          <div
-            key={collection.id}
-            style={{ cursor: "pointer" }}
-            onClick={() => navigate(`/collections/${collection.id}`)}
-          >
-            <img
-              src={collection.image_urls[0]}
-              alt={collection.name}
-              style={{
-                width: 30,
-                height: 30,
-                borderRadius: 30,
-                objectFit: "cover",
-                display: "block",
-                margin: "0 auto",
-              }}
-            />
-            <div style={{ fontSize: 12, marginTop: 4 }}>
-              {collection.name}
-            </div>
-          </div>
-        ))}
-      </div>
+     
 
       {/* LATEST COLLECTION */}
       <div style={{display:'flex', flexDirection:'row'}}>
@@ -152,7 +135,7 @@ export default function HomePage() {
               style={{
                 width: 30,
                 height: 30,
-                borderRadius: 30,
+                
                 objectFit: "cover",
                 display: "block",
 				marginLeft:10,
@@ -191,8 +174,8 @@ export default function HomePage() {
           <div
             key={item.id}
             style={{
-              border: "1px solid #eee",
-              borderRadius: 12,
+             
+             
               padding: 10,
               cursor: "pointer",
             }}
@@ -208,7 +191,7 @@ export default function HomePage() {
                   width: "100%",
                   height: 220,
                   objectFit: "cover",
-                  borderRadius: 8,
+                  borderRadius: 0,
                 }}
               />
             )}
@@ -219,7 +202,40 @@ export default function HomePage() {
           </div>
         ))}
       </div>
-
+		
+		 {/* COLLECTIONS STRIP */}
+      <div
+        style={{
+          display: "flex",
+          gap: 16,
+          padding: "10px 10px 20px",
+          overflowX: "auto",
+        }}
+      >
+        {collections.map((collection) => (
+          <div
+            key={collection.id}
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate(`/collections/${collection.id}`)}
+          >
+            <img
+              src={collection.image_urls[0]}
+              alt={collection.name}
+              style={{
+                width: 30,
+                height: 30,
+                borderRadius: 30,
+                objectFit: "cover",
+                display: "block",
+                margin: "0 auto",
+              }}
+            />
+            <div style={{ fontSize: 12, marginTop: 4 }}>
+              {collection.name}
+            </div>
+          </div>
+        ))}
+      </div>
       {/* ADMIN LINKS */}
       <div
         style={{ fontSize: 20, marginLeft: 10, textAlign: "left" }}
