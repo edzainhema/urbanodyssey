@@ -125,7 +125,44 @@ export default function HomePage() {
         <Instagram size={24} />
       </div>
 
-     
+     {/* ITEMS */}
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)", // 👈 always 2 columns on mobile
+    gap: 12,
+    padding: 10,
+  }}
+>
+  {latestItems.map((item) => (
+    <div
+      key={item.id}
+      style={{
+        cursor: "pointer",
+      }}
+      onClick={() => navigate("/item", { state: { item } })}
+    >
+      {item.image_urls.length > 0 && (
+        <img
+          src={item.image_urls[0]}
+          alt={item.name}
+          style={{
+            width: "100%",
+            aspectRatio: "3 / 4", // 👈 fashion-friendly
+            objectFit: "cover",
+            borderRadius: 0,
+          }}
+        />
+      )}
+
+      <div style={{ marginTop: 6, fontWeight: 600 }}>
+        {item.name}
+      </div>
+      <div>${item.price}</div>
+    </div>
+  ))}
+</div>
+
 
       {/* LATEST COLLECTION */}
       <div style={{display:'flex', flexDirection:'row'}}>
@@ -145,54 +182,14 @@ export default function HomePage() {
       {latestCollection.image_urls.length > 0 && (
         <div className="image-row">
           {latestCollection.image_urls.map((url, i) => (
-            <img key={i} src={url} style={{ width: 300,  borderRadius:5, }} />
+            <img key={i} src={url} style={{ width: 300,  borderRadius:0, }} />
           ))}
         </div>
       )}
       
       
 
-      {/* ITEMS */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-          gap: 16,
-          padding: 16,
-        }}
-      >
-        {latestItems.map((item) => (
-          <div
-            key={item.id}
-            style={{
-             
-             
-              padding: 10,
-              cursor: "pointer",
-            }}
-            onClick={() =>
-              navigate("/item", { state: { item } })
-            }
-          >
-            {item.image_urls.length > 0 && (
-              <img
-                src={item.image_urls[0]}
-                alt={item.name}
-                style={{
-                  width: "100%",
-                  height: 220,
-                  objectFit: "cover",
-                  borderRadius: 5,
-                }}
-              />
-            )}
-            <div style={{ marginTop: 8, fontWeight: 600 }}>
-              {item.name}
-            </div>
-            <div>${item.price}</div>
-          </div>
-        ))}
-      </div>
+      
 		
 		 {/* COLLECTIONS STRIP */}
       <div
