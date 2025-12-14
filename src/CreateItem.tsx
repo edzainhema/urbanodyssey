@@ -89,27 +89,35 @@ export default function CreateItem() {
      Collection search
   ----------------------------- */
   const fetchCollections = async (query: string) => {
+	  console.log('F')
     if (!query.trim()) {
       setCollectionSuggestions([]);
       return;
     }
+    console.log('G');
 
     const { data, error } = await supabase
       .from("collections")
       .select("id, name")
       .ilike("name", `%${query}%`)
       .limit(5);
-
+	console.log('H');
     if (!error && data) {
       setCollectionSuggestions(data);
     }
+    console.log('I');
   };
 
   const handleCollectionInputChange = (value: string) => {
+	  console.log('A');
     setCollectionQuery(value);
+    console.log('B');
     setSelectedCollection(null);
+    console.log('C');
     setShowSuggestions(true);
+    console.log('D');
     fetchCollections(value);
+    console.log('E');
   };
 
   const handleSelectCollection = (collection: Collection) => {
