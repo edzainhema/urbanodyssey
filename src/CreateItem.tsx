@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { supabase } from "./lib/supabaseClient";
 const AVAILABLE_SIZES = ["XS", "S", "M", "L", "XL"];
 
 export type ItemType = {
@@ -9,6 +9,35 @@ export type ItemType = {
   sizes: string[];
   images: File[];
 };
+
+async function uploadImages(files: File[]) {
+  const urls: string[] = [];
+
+  for (const file of files) {
+    const ext = file.name.split(".").pop();
+    const fileName = `${crypto.randomUUID()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("item-images")
+      .upload(fileName, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    const { data } = supabase.storage
+      .from("item-images")
+      .getPublicUrl(fileName);
+
+    urls.push(data.publicUrl);
+  }
+
+  return urls;
+}
+
 
 export default function CreateItem() {
   const [name, setName] = useState("");
@@ -31,37 +60,51 @@ export default function CreateItem() {
   };
 
   const handleSubmit = async () => {
-	  console.log('YAAAAAAAAAAAAAAA');
-  if (!name || images.length === 0) {
-    alert("Please complete all required fields.");
-    return;
-  }
+  try {
+    if (!name.trim()) {
+      alert("Item name is required");
+      return;
+    }
 
-  const imageUrls = images.map(
-    (file) => `https://your-storage/${file.name}`
-  );
+    if (price === "" || Number(price) <= 0) {
+      alert("Valid price required");
+      return;
+    }
 
-  const res = await fetch("/api/create-item", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
+    if (sizes.length === 0) {
+      alert("Select at least one size");
+      return;
+    }
+
+    // 1. Upload images
+    const imageUrls =
+      images.length > 0 ? await uploadImages(images) : [];
+
+    // 2. Insert row into Supabase
+    const { error } = await supabase.from("items").insert({
       name,
-      price: price ? Number(price) * 100 : null,
-      description: description || null,
-      sizes: sizes.length > 0 ? sizes : null,
-      images: imageUrls,
-    }),
-  });
+      price,
+      description,
+      sizes,
+      image_urls: imageUrls,
+    });
 
-  const data = await res.json();
+    if (error) throw error;
 
-  if (!res.ok) {
-    alert(data.error || "Failed to create item");
-    return;
+    alert("Item created successfully");
+
+    // 3. Reset form
+    setName("");
+    setPrice("");
+    setDescription("");
+    setSizes([]);
+    setImages([]);
+  } catch (err: any) {
+    console.error(err);
+    alert(err.message ?? "Failed to create item");
   }
-
-  alert("Item created successfully!");
 };
+
 
 
 
