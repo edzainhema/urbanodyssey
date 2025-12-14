@@ -90,6 +90,7 @@ export default function CreateItem() {
   ----------------------------- */
   const fetchCollections = async (query: string) => {
 	  console.log('F')
+	  console.log(query)
     if (!query.trim()) {
       setCollectionSuggestions([]);
       return;
