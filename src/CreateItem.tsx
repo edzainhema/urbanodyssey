@@ -102,6 +102,7 @@ export default function CreateItem() {
       .ilike("name", `%${query}%`)
       .limit(5);
 	console.log('H');
+	console.log(data);
     if (!error && data) {
       setCollectionSuggestions(data);
     }
