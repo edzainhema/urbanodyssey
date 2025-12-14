@@ -129,18 +129,7 @@ export default function HomePage() {
 
       {/* LATEST COLLECTION */}
       <div style={{display:'flex', flexDirection:'row'}}>
-      <img
-              src={latestCollection.image_urls[0]}
-              alt={latestCollection.name}
-              style={{
-                width: 30,
-                height: 30,
-                
-                objectFit: "cover",
-                display: "block",
-				marginLeft:10,
-              }}
-            />
+		
       <div
         style={{
           textAlign: "left",
@@ -156,10 +145,12 @@ export default function HomePage() {
       {latestCollection.image_urls.length > 0 && (
         <div className="image-row">
           {latestCollection.image_urls.map((url, i) => (
-            <img key={i} src={url} style={{ width: 300 }} />
+            <img key={i} src={url} style={{ width: 300,  borderRadius:5, }} />
           ))}
         </div>
       )}
+      
+      
 
       {/* ITEMS */}
       <div
@@ -191,7 +182,7 @@ export default function HomePage() {
                   width: "100%",
                   height: 220,
                   objectFit: "cover",
-                  borderRadius: 0,
+                  borderRadius: 5,
                 }}
               />
             )}
