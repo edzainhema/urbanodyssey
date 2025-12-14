@@ -109,77 +109,65 @@ export default function HomePage() {
       </div>
 
       {/* COLLECTION STRIP */}
+<div
+  style={{
+    display: "flex",
+    gap: 18,
+    padding: "14px 12px",
+    overflowX: "auto",
+  }}
+>
+  {collections.map((collection) => {
+    const isActive =
+      latestCollection &&
+      collection.id === latestCollection.id;
+
+    return (
       <div
+        key={collection.id}
+        onClick={() => navigate(`/collections/${collection.id}`)}
         style={{
-          display: "flex",
-          gap: 18,
-          padding: "14px 12px",
-          overflowX: "auto",
+          cursor: "pointer",
+          textAlign: "center",
+          width: 80, // 👈 fixed width
+          flexShrink: 0,
         }}
       >
-        {collections.map((collection) => (
-          <div
-            key={collection.id}
-            onClick={() => navigate(`/collections/${collection.id}`)}
-            style={{ cursor: "pointer", textAlign: "center" }}
-          >
-            <img
-              src={collection.image_urls[0]}
-              alt={collection.name}
-              style={{
-                width: 30,
-                height: 30,
-                borderRadius: 30,
-                objectFit: "cover",
-                display: "block",
-                margin: "0 auto",
-              }}
-            />
-            <div style={{ fontSize: 12, marginTop: 4 }}>
-              {collection.name}
-            </div>
-          </div>
-        ))}
-      </div>
+        <img
+          src={collection.image_urls[0]}
+          alt={collection.name}
+          style={{
+            width: 30,
+            height: 30,
+            borderRadius: 30,
+            objectFit: "cover",
+            display: "block",
+            margin: "0 auto",
+          }}
+        />
 
-      {/* LATEST COLLECTION TITLE */}
-      <div
-        style={{
-          fontSize: 22,
-          fontWeight: 500,
-          margin: "12px 12px 8px",
-          textAlign: "left",
-        }}
-      >
-        {latestCollection.name}
-      </div>
-
-      {/* COLLECTION IMAGES (EDITORIAL GRID) */}
-      {latestCollection.image_urls.length > 0 && (
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gap: 6,
-            padding: "0 10px 16px",
+            fontSize: 12,
+            marginTop: 4,
+            fontWeight: isActive ? 600 : 400, // 👈 bold active
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis", // 👈 ...
           }}
+          title={collection.name} // optional: full name on hover
         >
-          {latestCollection.image_urls.map((url, i) => (
-            <img
-              key={i}
-              src={url}
-              alt={latestCollection.name}
-              style={{
-                width: "100%",
-                aspectRatio: "3 / 4",
-                objectFit: "cover",
-              }}
-            />
-          ))}
+          {collection.name}
         </div>
-      )}
+      </div>
+    );
+  })}
+</div>
 
-      {/* ITEMS GRID */}
+
+    
+      
+       {/* ITEMS GRID */}
       <div
         style={{
           display: "grid",
@@ -225,7 +213,45 @@ export default function HomePage() {
           </div>
         ))}
       </div>
+	
+	  {/* LATEST COLLECTION TITLE */}
+      <div
+        style={{
+          fontSize: 22,
+          fontWeight: 500,
+          margin: "12px 12px 8px",
+          textAlign: "left",
+        }}
+      >
+        {latestCollection.name}
+      </div>
 
+      {/* COLLECTION IMAGES (EDITORIAL GRID) */}
+      {latestCollection.image_urls.length > 0 && (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gap: 6,
+            padding: "0 10px 16px",
+          }}
+        >
+          {latestCollection.image_urls.map((url, i) => (
+            <img
+              key={i}
+              src={url}
+              alt={latestCollection.name}
+              style={{
+                width: "100%",
+                aspectRatio: "3 / 4",
+                objectFit: "cover",
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+     
       {/* ADMIN (SUBTLE) */}
       <div
         style={{
