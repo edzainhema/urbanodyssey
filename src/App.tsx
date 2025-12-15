@@ -11,6 +11,10 @@ import Item from "./Item";
 import CreateItem from "./CreateItem";
 import CreateCollection from "./CreateCollection";
 import CollectionPage from "./Collection";
+import Admin from "./Admin";
+import AdminItems from "./AdminItems";
+import AdminCollections from "./AdminCollections";
+
 
 const stripePromise = loadStripe(
   process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY!
@@ -25,7 +29,10 @@ function App() {
         <Route path="/create-item" element={<CreateItem />} />
         <Route path="/create-collection" element={<CreateCollection />} />
 		<Route path="/collections/:id" element={<CollectionPage />} />
-
+		<Route path="/admin" element={<Admin />} />
+		<Route path="/admin/items" element={<AdminItems />} />
+		<Route path="/admin/collections" element={<AdminCollections />} />
+	
       </Routes>
     </Elements>
   );
