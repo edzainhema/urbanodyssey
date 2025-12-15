@@ -105,9 +105,113 @@ export default function HomePage() {
         }}
       >
         <img src="/image_six.png" style={{ width: 28 }} />
+           {/* LATEST COLLECTION TITLE */}
+      <div
+        style={{
+          fontSize: 22,
+          fontWeight: 500,
+          margin: "0px 12px 8px",
+          textAlign: "left",
+        }}
+      >
+        URBAN ODYSSEY
+      </div>
         <Instagram size={20} />
       </div>
+		
+		{/* COLLECTION IMAGES (HORIZONTAL EDITORIAL STRIP) */}
+{latestCollection.image_urls.length > 0 && (
+  <div
+    className="hide-scrollbar"
+    style={{
+      display: "flex",
+      gap: 8,
+      padding: "0 10px 16px",
+      overflowX: "auto",
+      WebkitOverflowScrolling: "touch",
+    }}
+  >
+    {latestCollection.image_urls.map((url, i) => (
+      <img
+        key={i}
+        src={url}
+        alt={latestCollection.name}
+        style={{
+          width: 250,
+          height: "auto",
+          objectFit: "contain",
+          flexShrink: 0,
+        }}
+      />
+    ))}
+  </div>
+)}
 
+
+      
+       {/* LATEST COLLECTION TITLE */}
+      <div
+        style={{
+          fontSize: 22,
+          fontWeight: 500,
+          margin: "0px 12px 8px",
+          textAlign: "left",
+        }}
+      >
+        {latestCollection.name}
+      </div>
+
+
+       {/* ITEMS GRID */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: 14,
+          padding: "10px",
+        }}
+      >
+        {latestItems.map((item) => (
+          <div
+            key={item.id}
+            onClick={() => navigate("/item", { state: { item } })}
+            style={{ cursor: "pointer" }}
+          >
+            <img
+              src={item.image_urls[0]}
+              alt={item.name}
+              style={{
+                width: "100%",
+                aspectRatio: "3 / 4",
+                objectFit: "cover",
+              }}
+            />
+
+            <div
+              style={{
+                marginTop: 6,
+                fontSize: 14,
+                fontWeight: 500,
+              }}
+            >
+              {item.name}
+            </div>
+
+            <div
+              style={{
+                fontSize: 13,
+                opacity: 0.8,
+              }}
+            >
+              ${item.price}
+            </div>
+          </div>
+        ))}
+      </div>
+	
+	 
+     	
+		
       {/* COLLECTION STRIP */}
 <div
   style={{
@@ -163,94 +267,6 @@ export default function HomePage() {
     );
   })}
 </div>
-
-
-    
-      
-       {/* ITEMS GRID */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: 14,
-          padding: "10px",
-        }}
-      >
-        {latestItems.map((item) => (
-          <div
-            key={item.id}
-            onClick={() => navigate("/item", { state: { item } })}
-            style={{ cursor: "pointer" }}
-          >
-            <img
-              src={item.image_urls[0]}
-              alt={item.name}
-              style={{
-                width: "100%",
-                aspectRatio: "3 / 4",
-                objectFit: "cover",
-              }}
-            />
-
-            <div
-              style={{
-                marginTop: 6,
-                fontSize: 14,
-                fontWeight: 500,
-              }}
-            >
-              {item.name}
-            </div>
-
-            <div
-              style={{
-                fontSize: 13,
-                opacity: 0.8,
-              }}
-            >
-              ${item.price}
-            </div>
-          </div>
-        ))}
-      </div>
-	
-	  {/* LATEST COLLECTION TITLE */}
-      <div
-        style={{
-          fontSize: 22,
-          fontWeight: 500,
-          margin: "12px 12px 8px",
-          textAlign: "left",
-        }}
-      >
-        {latestCollection.name}
-      </div>
-
-      {/* COLLECTION IMAGES (EDITORIAL GRID) */}
-      {latestCollection.image_urls.length > 0 && (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gap: 6,
-            padding: "0 10px 16px",
-          }}
-        >
-          {latestCollection.image_urls.map((url, i) => (
-            <img
-              key={i}
-              src={url}
-              alt={latestCollection.name}
-              style={{
-                width: "100%",
-                aspectRatio: "3 / 4",
-                objectFit: "cover",
-              }}
-            />
-          ))}
-        </div>
-      )}
-
      
       {/* ADMIN (SUBTLE) */}
       <div
