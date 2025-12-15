@@ -25,47 +25,98 @@ export default function Checkout() {
      Create Payment Intent
   ----------------------------- */
   useEffect(() => {
-    fetch("/api/create-payment-intent", {
+  console.log("🧾 Cart contents:", cart);
+  console.log("💰 Total amount:", totalAmount);
 
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        amount: Math.round(totalAmount * 100), // cents
-      }),
+  if (totalAmount <= 0) {
+    console.warn("⚠️ Total amount is 0 — not creating payment intent");
+    return;
+  }
+
+  console.log("➡️ Creating payment intent...");
+
+  fetch("/api/create-payment-intent", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      amount: Math.round(totalAmount * 100),
+    }),
+  })
+    .then(async (res) => {
+      console.log("⬅️ Payment intent response status:", res.status);
+
+      const text = await res.text();
+      console.log("⬅️ Raw response:", text);
+
+      try {
+        const data = JSON.parse(text);
+        return data;
+      } catch (err) {
+        throw new Error("Response is not valid JSON");
+      }
     })
-      .then((res) => res.json())
-      .then((data) => setClientSecret(data.clientSecret));
-  }, [totalAmount]);
+    .then((data) => {
+      console.log("✅ Parsed response:", data);
+
+      if (!data.clientSecret) {
+        console.error("❌ No clientSecret returned:", data);
+        return;
+      }
+
+      setClientSecret(data.clientSecret);
+    })
+    .catch((err) => {
+      console.error("🔥 Failed to create payment intent:", err);
+    });
+}, [totalAmount]);
+
 
   /* ----------------------------
      Submit
   ----------------------------- */
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!stripe || !elements) return;
+  e.preventDefault();
 
-    setLoading(true);
+  console.log("🟢 Submitting payment");
+  console.log("Name:", name);
+  console.log("Address:", address);
+  console.log("Stripe loaded:", !!stripe);
+  console.log("Elements loaded:", !!elements);
 
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        payment_method_data: {
-          billing_details: {
-            name,
-            address: { line1: address },
-          },
+  if (!stripe || !elements) {
+    console.warn("⚠️ Stripe or Elements not ready");
+    return;
+  }
+
+  setLoading(true);
+
+  const { error } = await stripe.confirmPayment({
+    elements,
+    confirmParams: {
+      payment_method_data: {
+        billing_details: {
+          name,
+          address: { line1: address },
         },
-        return_url: window.location.origin + "/success",
       },
-    });
+      return_url: window.location.origin + "/success",
+    },
+  });
 
-    setLoading(false);
+  setLoading(false);
 
-    if (!error) {
-      clearCart();
-    }
-  };
+  if (error) {
+    console.error("❌ Stripe confirmPayment error:", error);
+  } else {
+    console.log("✅ Payment confirmed");
+    clearCart();
+  }
+};
 
+	console.log("🔐 Stripe loaded:", !!stripe);
+  console.log("🧩 Elements loaded:", !!elements);
+  console.log("🔑 Client secret:", clientSecret);
+  
   if (!clientSecret) {
     return <div style={{ padding: 20 }}>Loading payment…</div>;
   }
