@@ -25,7 +25,8 @@ export default function Checkout() {
      Create Payment Intent
   ----------------------------- */
   useEffect(() => {
-    fetch("/create-payment-intent", {
+    fetch("/api/create-payment-intent", {
+
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
