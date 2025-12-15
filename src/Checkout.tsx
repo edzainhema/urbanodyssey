@@ -14,7 +14,7 @@ const stripePromise = loadStripe(
 );
 
 /* =========================
-   TOP-LEVEL PAGE COMPONENT
+   PAGE
 ========================= */
 export default function Checkout() {
   const { cart } = useCart();
@@ -54,15 +54,22 @@ export default function Checkout() {
 }
 
 /* =========================
-   FORM COMPONENT
+   FORM
 ========================= */
 function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
-  const { clearCart } = useCart();
+  const { cart, clearCart } = useCart();
 
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const total = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -74,6 +81,14 @@ function CheckoutForm() {
       elements,
       confirmParams: {
         return_url: `${window.location.origin}/success`,
+        payment_method_data: {
+          billing_details: {
+            name,
+            address: {
+              line1: address,
+            },
+          },
+        },
       },
     });
 
@@ -93,22 +108,120 @@ function CheckoutForm() {
     >
       <h2>Checkout</h2>
 
+      {/* =========================
+          ORDER SUMMARY
+      ========================= */}
+      <div style={summaryBox}>
+        {cart.map((item) => (
+          <div
+            key={`${item.id}-${item.size ?? "nosize"}`}
+            style={summaryRow}
+          >
+            <div>
+              <div style={{ fontWeight: 500 }}>
+                {item.name}
+              </div>
+
+              {item.size && (
+                <div style={meta}>
+                  Size: {item.size}
+                </div>
+              )}
+
+              <div style={meta}>
+                ${item.price} × {item.quantity}
+              </div>
+            </div>
+
+            <div style={{ fontWeight: 500 }}>
+              ${(item.price * item.quantity).toFixed(2)}
+            </div>
+          </div>
+        ))}
+
+        <div style={totalRow}>
+          <span>Total</span>
+          <span>${total.toFixed(2)}</span>
+        </div>
+      </div>
+
+      {/* =========================
+          CUSTOMER INFO
+      ========================= */}
+      <input
+        required
+        placeholder="Full name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        style={input}
+      />
+
+      <input
+        required
+        placeholder="Shipping address"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+        style={input}
+      />
+
+      {/* =========================
+          STRIPE PAYMENT UI
+      ========================= */}
       <PaymentElement />
 
       <button
         disabled={!stripe || loading}
-        style={{
-          width: "100%",
-          padding: 14,
-          borderRadius: 30,
-          background: "black",
-          color: "white",
-          border: "none",
-          marginTop: 20,
-        }}
+        style={button}
       >
-        {loading ? "Processing…" : "Pay now"}
+        {loading ? "Processing…" : `Pay $${total.toFixed(2)}`}
       </button>
     </form>
   );
 }
+
+/* =========================
+   STYLES
+========================= */
+const summaryBox: React.CSSProperties = {
+  border: "1px solid #e5e5e5",
+  borderRadius: 12,
+  padding: 12,
+  marginBottom: 20,
+};
+
+const summaryRow: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "space-between",
+  marginBottom: 10,
+};
+
+const totalRow: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "space-between",
+  marginTop: 12,
+  paddingTop: 12,
+  borderTop: "1px solid #e5e5e5",
+  fontWeight: 600,
+};
+
+const meta: React.CSSProperties = {
+  fontSize: 13,
+  opacity: 0.7,
+};
+
+const input: React.CSSProperties = {
+  width: "100%",
+  padding: 12,
+  marginBottom: 12,
+  fontSize: 14,
+};
+
+const button: React.CSSProperties = {
+  width: "100%",
+  padding: 14,
+  borderRadius: 30,
+  background: "black",
+  color: "white",
+  border: "none",
+  marginTop: 20,
+};
