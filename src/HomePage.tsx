@@ -246,7 +246,7 @@ export default function HomePage() {
       <div
         className="hide-scrollbar"
         style={{
-          display: "flex",
+          display: "none",
           gap: 16,
           padding: "12px",
           overflowX: "auto",

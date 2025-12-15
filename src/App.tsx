@@ -14,6 +14,8 @@ import CollectionPage from "./Collection";
 import Admin from "./Admin";
 import AdminItems from "./AdminItems";
 import AdminCollections from "./AdminCollections";
+import EditItem from "./EditItem";
+import EditCollection from "./EditCollection";
 
 
 const stripePromise = loadStripe(
@@ -32,7 +34,9 @@ function App() {
 		<Route path="/admin" element={<Admin />} />
 		<Route path="/admin/items" element={<AdminItems />} />
 		<Route path="/admin/collections" element={<AdminCollections />} />
-	
+		<Route path="/admin/items/:id/edit" element={<EditItem />} />
+		<Route path="/admin/collections/:id/edit" element={<EditCollection />} />
+
       </Routes>
     </Elements>
   );
