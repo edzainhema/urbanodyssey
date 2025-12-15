@@ -170,10 +170,11 @@ export default function HomePage() {
        {/* LATEST COLLECTION TITLE */}
       <div
         style={{
-          fontSize: 22,
+          fontSize: 18,
           fontWeight: 500,
-          margin: "0px 12px 8px",
+          margin: "0px 12px 6px",
           textAlign: "left",
+          letterSpacing: "0.02em",
         }}
       >
         {latestCollection.name}
