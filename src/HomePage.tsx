@@ -176,7 +176,7 @@ export default function HomePage() {
       {/* COLLECTION TITLE (CAPTION STYLE) */}
       <div
         style={{
-          fontSize: 18,
+          fontSize: 16,
           fontWeight: 500,
           margin: "8px 12px 6px",
           textAlign: "left",

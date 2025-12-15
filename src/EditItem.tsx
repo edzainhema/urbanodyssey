@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "./lib/supabaseClient";
+import { logAdminAction } from "./lib/logAdminAction";
+
 
 export default function EditItem() {
   const { id } = useParams<{ id: string }>();
@@ -11,6 +13,10 @@ export default function EditItem() {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+
+const [originalName, setOriginalName] = useState("");
+const [originalPrice, setOriginalPrice] = useState<number>(0);
+const [originalImageUrls, setOriginalImageUrls] = useState<string[]>([]);
 
   /* ----------------------------
      Fetch item
@@ -28,10 +34,17 @@ export default function EditItem() {
         return;
       }
 
-      setName(data.name);
-      setPrice(data.price);
-      setImageUrls(data.image_urls || []);
-      setLoading(false);
+    setName(data.name);
+	setPrice(data.price);
+	setImageUrls(data.image_urls || []);
+	
+	setOriginalName(data.name);
+	setOriginalPrice(data.price);
+	setOriginalImageUrls(data.image_urls || []);
+	
+	setLoading(false);
+	
+
     };
 
     fetchItem();
@@ -41,26 +54,65 @@ export default function EditItem() {
      Save
   ----------------------------- */
   const handleSave = async () => {
-    setSaving(true);
+  setSaving(true);
 
-    const { error } = await supabase
-      .from("items")
-      .update({
-        name,
-        price,
-        image_urls: imageUrls,
-      })
-      .eq("id", id);
+  const changes: string[] = [];
 
+  // Detect changes
+  if (name !== originalName) {
+    changes.push(`Name changed from "${originalName}" to "${name}"`);
+  }
+
+  if (price !== originalPrice) {
+    changes.push(`Price changed from ${originalPrice} to ${price}`);
+  }
+
+  if (
+    JSON.stringify(imageUrls) !==
+    JSON.stringify(originalImageUrls)
+  ) {
+    changes.push("Images were modified");
+  }
+
+  // If nothing changed, stop
+  if (changes.length === 0) {
+    alert("No changes to save");
     setSaving(false);
+    return;
+  }
 
-    if (error) {
-      alert(error.message);
-      return;
-    }
+  // Update database
+  const { error } = await supabase
+    .from("items")
+    .update({
+      name,
+      price,
+      image_urls: imageUrls,
+    })
+    .eq("id", id);
 
-    navigate("/admin/items");
-  };
+  setSaving(false);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  // Log admin action
+  const timestamp = new Date().toLocaleString();
+
+  await logAdminAction(
+  "Item edited",
+  `Item "${originalName}" was edited on ${timestamp}.\n` +
+  `Changes:\n` +
+  `${changes.map((c) => `${c};`).join("\n")}`
+);
+
+
+
+  navigate("/admin/items");
+};
+
 
   if (loading) {
     return (

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "./lib/supabaseClient";
+import { logAdminAction } from "./lib/logAdminAction";
 
 export default function EditCollection() {
   const { id } = useParams<{ id: string }>();
@@ -9,6 +10,12 @@ export default function EditCollection() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+  // originals for diffing
+  const [originalName, setOriginalName] = useState("");
+  const [originalDescription, setOriginalDescription] = useState("");
+  const [originalImageUrls, setOriginalImageUrls] = useState<string[]>([]);
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -31,6 +38,12 @@ export default function EditCollection() {
       setName(data.name);
       setDescription(data.description || "");
       setImageUrls(data.image_urls || []);
+
+      // store originals
+      setOriginalName(data.name);
+      setOriginalDescription(data.description || "");
+      setOriginalImageUrls(data.image_urls || []);
+
       setLoading(false);
     };
 
@@ -42,6 +55,35 @@ export default function EditCollection() {
   ----------------------------- */
   const handleSave = async () => {
     setSaving(true);
+
+    const changes: string[] = [];
+
+    // detect changes
+    if (name !== originalName) {
+      changes.push(
+        `Name changed from "${originalName}" to "${name}"`
+      );
+    }
+
+    if (description !== originalDescription) {
+	  changes.push(
+	    `Description changed from "${originalDescription}" to "${description}"`
+	  );
+	}
+
+
+    if (
+      JSON.stringify(imageUrls) !==
+      JSON.stringify(originalImageUrls)
+    ) {
+      changes.push("Images were modified");
+    }
+
+    if (changes.length === 0) {
+      alert("No changes to save");
+      setSaving(false);
+      return;
+    }
 
     const { error } = await supabase
       .from("collections")
@@ -59,9 +101,21 @@ export default function EditCollection() {
       return;
     }
 
+    const timestamp = new Date().toLocaleString();
+
+    await logAdminAction(
+      "Collection edited",
+      `Collection "${originalName}" was edited on ${timestamp}.\n` +
+        `Changes:\n` +
+        `${changes.map((c) => `${c};`).join("\n")}`
+    );
+
     navigate("/admin/collections");
   };
 
+  /* ----------------------------
+     Loading state
+  ----------------------------- */
   if (loading) {
     return (
       <div style={centered}>
@@ -70,6 +124,9 @@ export default function EditCollection() {
     );
   }
 
+  /* ----------------------------
+     UI
+  ----------------------------- */
   return (
     <div style={container}>
       <h2 style={title}>Edit Collection</h2>
