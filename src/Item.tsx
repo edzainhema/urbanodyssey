@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useCart } from "./cart/CartContext";
 
 /* ----------------------------
    Types
@@ -15,12 +16,28 @@ type ItemType = {
 export default function Item() {
   const location = useLocation();
   const item = (location.state as { item: ItemType } | null)?.item;
+  const { addToCart, removeFromCart, cart } = useCart();
 
+
+
+	
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
+
+	useEffect(() => {
+  console.log("Item page loaded with item:", item);
+}, [item]);
+
 
   if (!item) {
     return <div>Item not found</div>;
   }
+  
+  
+  	const isInCart = cart.some(
+  (cartItem) =>
+    cartItem.id === item.id &&
+    cartItem.size === (selectedSize ?? null)
+);
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: 16 }}>
@@ -53,8 +70,7 @@ export default function Item() {
 
       {/* Size selection (only if sizes exist) */}
       {item.sizes && (
-        <div style={{ marginTop: 24, textAlign: "left" }}>
-          <div style={{ marginBottom: 10 }}>Select size</div>
+        <div style={{ marginTop: 18, textAlign: "left" }}>
 
           <div style={{ display: "flex", gap: 12 }}>
             {item.sizes.map((size: string) => (
@@ -80,29 +96,47 @@ export default function Item() {
       )}
 
       {/* Buy button */}
-      <button
-        disabled={item.sizes ? !selectedSize : false}
-        style={{
-          marginTop: 32,
-          padding: "14px 28px",
-          fontSize: 16,
-          borderRadius: 30,
-          border: "none",
-          cursor:
-            item.sizes && !selectedSize
-              ? "not-allowed"
-              : "pointer",
-          background:
-            item.sizes && !selectedSize ? "#ccc" : "black",
-          color: "white",
-        }}
-      >
-        {item.sizes
-          ? selectedSize
-            ? `Buy (${selectedSize})`
-            : "Select a size"
-          : "Buy"}
-      </button>
+     <button
+  disabled={item.sizes && !selectedSize}
+  onClick={() => {
+    if (isInCart) {
+      removeFromCart(item.id, selectedSize ?? null);
+      return;
+    }
+
+    addToCart({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      thumbnail: item.image_urls[0],
+      size: selectedSize ?? null,
+      quantity: 1,
+    });
+  }}
+  style={{
+    marginTop: 32,
+    padding: "14px 28px",
+    fontSize: 16,
+    borderRadius: 30,
+    border: "none",
+    cursor:
+      item.sizes && !selectedSize ? "not-allowed" : "pointer",
+    background: isInCart ? "#e5e5e5" : "black",
+    color: isInCart ? "#555" : "white",
+    transition: "all 0.15s ease",
+  }}
+>
+  {isInCart
+    ? "Remove from Cart"
+    : item.sizes
+    ? selectedSize
+      ? `Add to Cart (${selectedSize})`
+      : "Select a size"
+    : "Add to Cart"}
+</button>
+
+
+
     </div>
   );
 }

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Instagram } from "lucide-react";
+import { Instagram, ShoppingBag } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./lib/supabaseClient";
+import { useCart } from "./cart/CartContext";
+
 
 import "./App.css";
 
@@ -36,6 +38,9 @@ export default function HomePage() {
     useState<Collection | null>(null);
   const [latestItems, setLatestItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
+	const { addToCart } = useCart();
+	const { cart } = useCart();
+	
 
   /* ----------------------------
      Fetch data
@@ -62,7 +67,7 @@ export default function HomePage() {
 
       const { data: itemsData } = await supabase
         .from("items")
-        .select("id, name, price, image_urls, thumbnail")
+        .select("id, name, price, image_urls, thumbnail, sizes")
         .eq("collection_id", latest.id);
 
       if (itemsData) {
@@ -122,7 +127,7 @@ export default function HomePage() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "32px 1fr 32px",
+          gridTemplateColumns: "32px 1fr auto 32px",
           alignItems: "center",
           padding: "12px 14px",
         }}
@@ -143,6 +148,45 @@ export default function HomePage() {
         >
           URBAN ODYSSEY
         </div>
+		<div
+		  onClick={() => navigate("/cart")}
+  style={{
+    position: "relative",
+    width: 20,
+    height: 20,
+    cursor: "pointer",
+    marginRight:10,
+  }}
+>
+  {/* Cart icon */}
+  <ShoppingBag size={20} />
+
+  {/* Badge */}
+  {cart.length > 0 && (
+    <div
+      style={{
+        position: "absolute",
+        top: -6,
+        right: -6,
+        minWidth: 10,
+        height: 16,
+        padding: "0 4px",
+        borderRadius: 999,
+        background: "black",
+        color: "white",
+        fontSize: 10,
+        fontWeight: 600,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        lineHeight: 1,
+      }}
+    >
+      {cart.reduce((sum, i) => sum + i.quantity, 0)}
+    </div>
+  )}
+</div>
+
 
         <Instagram size={20} />
       </div>
