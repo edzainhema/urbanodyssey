@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./lib/supabaseClient";
 import { Trash2, Edit } from "lucide-react";
+import { logAdminAction } from "./lib/logAdminAction";
 
 /* ----------------------------
    Types
@@ -36,16 +37,33 @@ export default function AdminItems() {
     setLoading(false);
   };
 
-  const handleDelete = async (id: string) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this item?"
-    );
+  const handleDelete = async (id: string, name: string) => {
+	  const confirmed = window.confirm(
+	    "Are you sure you want to delete this item?"
+	  );
+	
+	  if (!confirmed) return;
+	
+	  const { error } = await supabase
+	    .from("items")
+	    .delete()
+	    .eq("id", id);
+	
+	  if (error) {
+	    alert(error.message);
+	    return;
+	  }
+		
+	const timestamp = new Date().toLocaleString();
+		
+	 await logAdminAction(
+	    "Item deleted",
+	    `Item "${name}" was deleted on ${timestamp}`
+	  );
+	
+	  setItems((prev) => prev.filter((i) => i.id !== id));
+	};
 
-    if (!confirmed) return;
-
-    await supabase.from("items").delete().eq("id", id);
-    setItems((prev) => prev.filter((i) => i.id !== id));
-  };
 
   const filteredItems = items.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase())
@@ -98,7 +116,7 @@ export default function AdminItems() {
               />
               <Trash2
                 size={16}
-                onClick={() => handleDelete(item.id)}
+                onClick={() => handleDelete(item.id, item.name)}
                 style={icon}
               />
             </div>

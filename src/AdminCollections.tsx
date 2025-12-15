@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./lib/supabaseClient";
 import { Trash2, Edit } from "lucide-react";
+import { logAdminAction } from "./lib/logAdminAction";
 
 /* ----------------------------
    Types
@@ -35,16 +36,33 @@ export default function AdminCollections() {
     setLoading(false);
   };
 
-  const handleDelete = async (id: string) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this collection?"
-    );
+  const handleDelete = async (id: string, name: string) => {
+  const confirmed = window.confirm(
+    "Are you sure you want to delete this collection?"
+  );
 
-    if (!confirmed) return;
+  if (!confirmed) return;
 
-    await supabase.from("collections").delete().eq("id", id);
-    setCollections((prev) => prev.filter((c) => c.id !== id));
-  };
+  const { error } = await supabase
+    .from("collections")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  const timestamp = new Date().toLocaleString();
+
+  await logAdminAction(
+    "Collection deleted",
+    `Collection "${name}" was deleted on ${timestamp}`
+  );
+
+  setCollections((prev) => prev.filter((c) => c.id !== id));
+};
+
 
   const filteredCollections = collections.filter((c) =>
     c.name.toLowerCase().includes(search.toLowerCase())
@@ -96,7 +114,7 @@ export default function AdminCollections() {
               />
               <Trash2
                 size={16}
-                onClick={() => handleDelete(collection.id)}
+                onClick={() => handleDelete(collection.id, collection.name)}
                 style={icon}
               />
             </div>
