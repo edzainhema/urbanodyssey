@@ -230,11 +230,12 @@ const input: React.CSSProperties = {
   padding: 14,
   marginBottom: 12,
   fontSize: 14,
-  border: "none",
+  background: "white",
+  border: "1px solid black",
   borderRadius: 10,
-  background: "rgb(240,240,240)",
   outline: "none",
 };
+
 
 const button: React.CSSProperties = {
   width: "100%",
