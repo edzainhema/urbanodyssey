@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "./lib/supabaseClient";
 import { logAdminAction } from "./lib/logAdminAction";
 
-
 export default function EditItem() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -11,12 +10,15 @@ export default function EditItem() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState<number | "">("");
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [thumbnail, setThumbnail] = useState<string | null>(null);
+
+  const [originalName, setOriginalName] = useState("");
+  const [originalPrice, setOriginalPrice] = useState<number>(0);
+  const [originalImageUrls, setOriginalImageUrls] = useState<string[]>([]);
+  const [originalThumbnail, setOriginalThumbnail] = useState<string | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-
-const [originalName, setOriginalName] = useState("");
-const [originalPrice, setOriginalPrice] = useState<number>(0);
-const [originalImageUrls, setOriginalImageUrls] = useState<string[]>([]);
 
   /* ----------------------------
      Fetch item
@@ -25,7 +27,7 @@ const [originalImageUrls, setOriginalImageUrls] = useState<string[]>([]);
     const fetchItem = async () => {
       const { data, error } = await supabase
         .from("items")
-        .select("name, price, image_urls")
+        .select("name, price, image_urls, thumbnail")
         .eq("id", id)
         .single();
 
@@ -34,17 +36,17 @@ const [originalImageUrls, setOriginalImageUrls] = useState<string[]>([]);
         return;
       }
 
-    setName(data.name);
-	setPrice(data.price);
-	setImageUrls(data.image_urls || []);
-	
-	setOriginalName(data.name);
-	setOriginalPrice(data.price);
-	setOriginalImageUrls(data.image_urls || []);
-	
-	setLoading(false);
-	
+      setName(data.name);
+      setPrice(data.price);
+      setImageUrls(data.image_urls || []);
+      setThumbnail(data.thumbnail || null);
 
+      setOriginalName(data.name);
+      setOriginalPrice(data.price);
+      setOriginalImageUrls(data.image_urls || []);
+      setOriginalThumbnail(data.thumbnail || null);
+
+      setLoading(false);
     };
 
     fetchItem();
@@ -54,66 +56,69 @@ const [originalImageUrls, setOriginalImageUrls] = useState<string[]>([]);
      Save
   ----------------------------- */
   const handleSave = async () => {
-  setSaving(true);
+    setSaving(true);
 
-  const changes: string[] = [];
+    const changes: string[] = [];
 
-  // Detect changes
-  if (name !== originalName) {
-    changes.push(`Name changed from "${originalName}" to "${name}"`);
-  }
+    if (name !== originalName) {
+      changes.push(`Name changed from "${originalName}" to "${name}"`);
+    }
 
-  if (price !== originalPrice) {
-    changes.push(`Price changed from ${originalPrice} to ${price}`);
-  }
+    if (price !== originalPrice) {
+      changes.push(`Price changed from ${originalPrice} to ${price}`);
+    }
 
-  if (
-    JSON.stringify(imageUrls) !==
-    JSON.stringify(originalImageUrls)
-  ) {
-    changes.push("Images were modified");
-  }
+    if (
+      JSON.stringify(imageUrls) !==
+      JSON.stringify(originalImageUrls)
+    ) {
+      changes.push("Images were modified");
+    }
 
-  // If nothing changed, stop
-  if (changes.length === 0) {
-    alert("No changes to save");
+    if (thumbnail !== originalThumbnail) {
+      changes.push(
+        `Thumbnail changed from "${originalThumbnail ?? "none"}" to "${thumbnail ?? "none"}"`
+      );
+    }
+
+    if (changes.length === 0) {
+      alert("No changes to save");
+      setSaving(false);
+      return;
+    }
+
+    const { error } = await supabase
+      .from("items")
+      .update({
+        name,
+        price,
+        image_urls: imageUrls,
+        thumbnail,
+      })
+      .eq("id", id);
+
     setSaving(false);
-    return;
-  }
 
-  // Update database
-  const { error } = await supabase
-    .from("items")
-    .update({
-      name,
-      price,
-      image_urls: imageUrls,
-    })
-    .eq("id", id);
+    if (error) {
+      alert(error.message);
+      return;
+    }
 
-  setSaving(false);
+    const timestamp = new Date().toLocaleString();
 
-  if (error) {
-    alert(error.message);
-    return;
-  }
+    await logAdminAction(
+      "Item edited",
+      `Item "${originalName}" was edited on ${timestamp}.\n` +
+        `Changes:\n` +
+        `${changes.map((c) => `${c};`).join("\n")}`
+    );
 
-  // Log admin action
-  const timestamp = new Date().toLocaleString();
+    navigate("/admin/items");
+  };
 
-  await logAdminAction(
-  "Item edited",
-  `Item "${originalName}" was edited on ${timestamp}.\n` +
-  `Changes:\n` +
-  `${changes.map((c) => `${c};`).join("\n")}`
-);
-
-
-
-  navigate("/admin/items");
-};
-
-
+  /* ----------------------------
+     Loading state
+  ----------------------------- */
   if (loading) {
     return (
       <div style={centered}>
@@ -122,6 +127,9 @@ const [originalImageUrls, setOriginalImageUrls] = useState<string[]>([]);
     );
   }
 
+  /* ----------------------------
+     UI
+  ----------------------------- */
   return (
     <div style={container}>
       <h2 style={title}>Edit Item</h2>
@@ -141,29 +149,67 @@ const [originalImageUrls, setOriginalImageUrls] = useState<string[]>([]);
         style={input}
       />
 
-      {/* Existing Images */}
+      {/* Images & Thumbnail */}
       <div style={{ marginTop: 16 }}>
-        <div style={{ marginBottom: 6 }}>Images</div>
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          {imageUrls.map((url, i) => (
-            <img
-              key={i}
-              src={url}
-              alt=""
-              style={{
-                width: 80,
-                height: 100,
-                objectFit: "cover",
-                cursor: "pointer",
-              }}
-              onClick={() =>
-                setImageUrls((prev) =>
-                  prev.filter((_, index) => index !== i)
-                )
-              }
-              title="Click to remove"
-            />
-          ))}
+        <div style={{ marginBottom: 6 }}>
+          Images (★ = main thumbnail)
+        </div>
+
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          {imageUrls.map((url, i) => {
+            const isThumbnail = thumbnail === url;
+
+            return (
+              <div key={i} style={{ position: "relative" }}>
+                <img
+                  src={url}
+                  alt=""
+                  style={{
+                    width: 80,
+                    height: 100,
+                    objectFit: "cover",
+                    cursor: "pointer",
+                    border: isThumbnail
+                      ? "2px solid black"
+                      : "1px solid #ddd",
+                  }}
+                  onClick={() =>
+                    setImageUrls((prev) =>
+                      prev.filter((_, index) => index !== i)
+                    )
+                  }
+                  title="Click image to remove"
+                />
+
+                {/* Set thumbnail */}
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setThumbnail(url);
+                  }}
+                  title="Set as thumbnail"
+                  style={{
+                    position: "absolute",
+                    top: 4,
+                    right: 4,
+                    background: "white",
+                    borderRadius: "50%",
+                    width: 18,
+                    height: 18,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 12,
+                    cursor: "pointer",
+                    border: "1px solid #ddd",
+                    fontWeight: isThumbnail ? 700 : 400,
+                  }}
+                >
+                  ★
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -194,7 +240,11 @@ const container: React.CSSProperties = {
   padding: 16,
 };
 
-const title = { fontSize: 20, fontWeight: 500, marginBottom: 16 };
+const title = {
+  fontSize: 20,
+  fontWeight: 500,
+  marginBottom: 16,
+};
 
 const input: React.CSSProperties = {
   width: "100%",

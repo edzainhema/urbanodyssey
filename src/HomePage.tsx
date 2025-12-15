@@ -21,7 +21,9 @@ type Item = {
   name: string;
   price: number;
   image_urls: string[];
+  thumbnail: string | null;
 };
+
 
 /* ============================
    HomePage
@@ -60,7 +62,7 @@ export default function HomePage() {
 
       const { data: itemsData } = await supabase
         .from("items")
-        .select("id, name, price, image_urls")
+        .select("id, name, price, image_urls, thumbnail")
         .eq("collection_id", latest.id);
 
       if (itemsData) {
@@ -176,7 +178,7 @@ export default function HomePage() {
       {/* COLLECTION TITLE (CAPTION STYLE) */}
       <div
         style={{
-          fontSize: 16,
+          fontSize: 18,
           fontWeight: 500,
           margin: "8px 12px 6px",
           textAlign: "left",
@@ -187,60 +189,61 @@ export default function HomePage() {
       </div>
 
       {/* ITEMS GRID */}
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: 14,
+    padding: "10px",
+  }}
+>
+  {latestItems.map((item) => (
+    <div
+      key={item.id}
+      onClick={() => navigate("/item", { state: { item } })}
+      style={{
+        cursor: "pointer",
+        transition: "opacity 0.15s ease",
+      }}
+      onMouseDown={(e) =>
+        (e.currentTarget.style.opacity = "0.6")
+      }
+      onMouseUp={(e) =>
+        (e.currentTarget.style.opacity = "1")
+      }
+    >
+      <img
+        src={item.thumbnail ?? item.image_urls[0]}
+        alt={item.name}
+        style={{
+          width: "100%",
+          aspectRatio: "3 / 4",
+          objectFit: "cover",
+        }}
+      />
+
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: 14,
-          padding: "10px",
+          marginTop: 6,
+          fontSize: 14,
+          fontWeight: 500,
         }}
       >
-        {latestItems.map((item) => (
-          <div
-            key={item.id}
-            onClick={() => navigate("/item", { state: { item } })}
-            style={{
-              cursor: "pointer",
-              transition: "opacity 0.15s ease",
-            }}
-            onMouseDown={(e) =>
-              (e.currentTarget.style.opacity = "0.6")
-            }
-            onMouseUp={(e) =>
-              (e.currentTarget.style.opacity = "1")
-            }
-          >
-            <img
-              src={item.image_urls[0]}
-              alt={item.name}
-              style={{
-                width: "100%",
-                aspectRatio: "3 / 4",
-                objectFit: "cover",
-              }}
-            />
-
-            <div
-              style={{
-                marginTop: 6,
-                fontSize: 14,
-                fontWeight: 500,
-              }}
-            >
-              {item.name}
-            </div>
-
-            <div
-              style={{
-                fontSize: 13,
-                opacity: 0.8,
-              }}
-            >
-              ${item.price}
-            </div>
-          </div>
-        ))}
+        {item.name}
       </div>
+
+      <div
+        style={{
+          fontSize: 13,
+          opacity: 0.8,
+        }}
+      >
+        ${item.price}
+      </div>
+    </div>
+  ))}
+</div>
+
 
       {/* COLLECTION STRIP (NAVIGATION) */}
       <div
