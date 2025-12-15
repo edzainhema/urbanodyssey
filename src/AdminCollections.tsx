@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "./lib/supabaseClient";
+import { Trash2, Edit } from "lucide-react";
 
 /* ----------------------------
    Types
@@ -17,86 +18,87 @@ type Collection = {
 export default function AdminCollections() {
   const navigate = useNavigate();
   const [collections, setCollections] = useState<Collection[]>([]);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCollections = async () => {
-      const { data } = await supabase
-        .from("collections")
-        .select("id, name, image_urls")
-        .order("created_at", { ascending: false });
-
-      if (data) {
-        setCollections(data);
-      }
-
-      setLoading(false);
-    };
-
     fetchCollections();
   }, []);
 
+  const fetchCollections = async () => {
+    const { data } = await supabase
+      .from("collections")
+      .select("id, name, image_urls")
+      .order("created_at", { ascending: false });
+
+    if (data) setCollections(data);
+    setLoading(false);
+  };
+
+  const handleDelete = async (id: string) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this collection?"
+    );
+
+    if (!confirmed) return;
+
+    await supabase.from("collections").delete().eq("id", id);
+    setCollections((prev) => prev.filter((c) => c.id !== id));
+  };
+
+  const filteredCollections = collections.filter((c) =>
+    c.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   if (loading) {
     return (
-      <div
-        style={{
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <div style={centered}>
         <img src="/image_six.png" style={{ width: 32 }} />
       </div>
     );
   }
 
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto", padding: 16 }}>
-      <div
-        style={{
-          fontSize: 20,
-          fontWeight: 500,
-          marginBottom: 16,
-        }}
-      >
-        Collections
-      </div>
+    <div style={{ padding: 16 }}>
+      <h2 style={title}>Collections</h2>
 
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        {collections.map((collection) => (
-          <div
-            key={collection.id}
-            onClick={() =>
-              navigate(`/collections/${collection.id}`)
-            }
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              padding: "10px 0",
-              cursor: "pointer",
-              borderBottom: "1px solid #eee",
-            }}
-          >
+      {/* SEARCH */}
+      <input
+        placeholder="Search collections"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        style={searchStyle}
+      />
+
+      {/* GRID */}
+      <div style={grid}>
+        {filteredCollections.map((collection) => (
+          <div key={collection.id} style={card}>
             <img
               src={collection.image_urls[0]}
               alt={collection.name}
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: 4,
-                objectFit: "cover",
-              }}
+              style={image}
+              onClick={() =>
+                navigate(`/collections/${collection.id}`)
+              }
             />
 
-            <div
-              style={{
-                fontSize: 14,
-                fontWeight: 500,
-              }}
-            >
-              {collection.name}
+            <div style={name}>{collection.name}</div>
+
+            {/* ACTIONS */}
+            <div style={actions}>
+              <Edit
+                size={16}
+                onClick={() =>
+                  navigate(`/admin/collections/${collection.id}/edit`)
+                }
+                style={icon}
+              />
+              <Trash2
+                size={16}
+                onClick={() => handleDelete(collection.id)}
+                style={icon}
+              />
             </div>
           </div>
         ))}
@@ -104,3 +106,55 @@ export default function AdminCollections() {
     </div>
   );
 }
+
+/* ----------------------------
+   Shared styles
+----------------------------- */
+const centered: React.CSSProperties = {
+  height: "100vh",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+const title = { fontSize: 20, fontWeight: 500, marginBottom: 12 };
+
+const searchStyle: React.CSSProperties = {
+  width: "100%",
+  padding: 10,
+  marginBottom: 16,
+  borderRadius: 6,
+  border: "1px solid #ddd",
+};
+
+const grid: React.CSSProperties = {
+  display: "grid",
+  gridTemplateColumns: "repeat(2, 1fr)",
+  gap: 14,
+};
+
+const card: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+};
+
+const image: React.CSSProperties = {
+  width: "100%",
+  aspectRatio: "3 / 4",
+  objectFit: "cover",
+  cursor: "pointer",
+};
+
+const name = { marginTop: 6, fontSize: 14, fontWeight: 500 };
+
+const actions: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "flex-end",
+  gap: 12,
+  marginTop: 6,
+};
+
+const icon: React.CSSProperties = {
+  cursor: "pointer",
+  opacity: 0.6,
+};
