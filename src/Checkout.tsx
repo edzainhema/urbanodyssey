@@ -7,7 +7,6 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import { useCart } from "./cart/CartContext";
-import { useNavigate } from "react-router-dom";
 
 const stripePromise = loadStripe(
   process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY!
@@ -59,7 +58,6 @@ export default function Checkout() {
 function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
-  const navigate = useNavigate();
   const { cart, clearCart } = useCart();
 
   const [name, setName] = useState("");
@@ -102,22 +100,25 @@ function CheckoutForm() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{ maxWidth: 420, margin: "40px auto" }}
-    >
-      <h2>Checkout</h2>
+    <form onSubmit={handleSubmit} style={container}>
+      <h2 style={title}>Checkout</h2>
 
       {/* =========================
-          ORDER SUMMARY
+          CART ITEMS
       ========================= */}
-      <div style={summaryBox}>
+      <div style={{ marginBottom: 24 }}>
         {cart.map((item) => (
           <div
             key={`${item.id}-${item.size ?? "nosize"}`}
-            style={summaryRow}
+            style={itemRow}
           >
-            <div>
+            <img
+              src={item.thumbnail}
+              alt={item.name}
+              style={thumbnail}
+            />
+
+            <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 500 }}>
                 {item.name}
               </div>
@@ -138,11 +139,14 @@ function CheckoutForm() {
             </div>
           </div>
         ))}
+      </div>
 
-        <div style={totalRow}>
-          <span>Total</span>
-          <span>${total.toFixed(2)}</span>
-        </div>
+      {/* =========================
+          TOTAL
+      ========================= */}
+      <div style={totalRow}>
+        <span>Total</span>
+        <span>${total.toFixed(2)}</span>
       </div>
 
       {/* =========================
@@ -165,7 +169,7 @@ function CheckoutForm() {
       />
 
       {/* =========================
-          STRIPE PAYMENT UI
+          STRIPE PAYMENT
       ========================= */}
       <PaymentElement />
 
@@ -182,38 +186,54 @@ function CheckoutForm() {
 /* =========================
    STYLES
 ========================= */
-const summaryBox: React.CSSProperties = {
-  border: "1px solid #e5e5e5",
-  borderRadius: 12,
-  padding: 12,
+const container: React.CSSProperties = {
+  maxWidth: 420,
+  margin: "30px auto",
+  padding: "0 10px", // 👈 mobile edge spacing
+};
+
+const title: React.CSSProperties = {
+  fontSize: 22,
+  fontWeight: 600,
   marginBottom: 20,
 };
 
-const summaryRow: React.CSSProperties = {
+const itemRow: React.CSSProperties = {
   display: "flex",
-  justifyContent: "space-between",
-  marginBottom: 10,
+  alignItems: "center",
+  gap: 12,
+  marginBottom: 16,
+};
+
+const thumbnail: React.CSSProperties = {
+  width: 56,
+  height: 70,
+  objectFit: "cover",
+  borderRadius: 8,
+};
+
+const meta: React.CSSProperties = {
+  fontSize: 13,
+  opacity: 0.6,
 };
 
 const totalRow: React.CSSProperties = {
   display: "flex",
   justifyContent: "space-between",
-  marginTop: 12,
-  paddingTop: 12,
-  borderTop: "1px solid #e5e5e5",
+  fontSize: 16,
   fontWeight: 600,
-};
-
-const meta: React.CSSProperties = {
-  fontSize: 13,
-  opacity: 0.7,
+  marginBottom: 24,
 };
 
 const input: React.CSSProperties = {
   width: "100%",
-  padding: 12,
+  padding: 14,
   marginBottom: 12,
   fontSize: 14,
+  border: "none",
+  borderRadius: 10,
+  background: "rgb(240,240,240)",
+  outline: "none",
 };
 
 const button: React.CSSProperties = {
