@@ -97,27 +97,45 @@ export default function HomePage() {
   return (
     <div>
       {/* HEADER */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "12px 14px",
-        }}
-      >
-        <img src="/image_six.png" style={{ width: 28 }} />
-           {/* LATEST COLLECTION TITLE */}
-      <div
-        style={{
-          fontSize: 22,
-          fontWeight: 500,
-          margin: "0px 12px 8px",
-          textAlign: "left",
-        }}
-      >
-        URBAN ODYSSEY
-      </div>
-        <Instagram size={20} />
-      </div>
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "32px 1fr 32px", // icon | text | icon
+    alignItems: "center",
+    padding: "12px 14px",
+  }}
+>
+  {/* Left icon */}
+  <img
+    src="/image_six.png"
+    alt="Urban Odyssey"
+    style={{
+      width: 20,
+      height: 20,
+      justifySelf: "start",
+    }}
+  />
+
+  {/* Brand text (left-aligned, slightly offset from icon) */}
+  <div
+    style={{
+      fontSize: 18,
+      fontWeight: 500,
+      letterSpacing: "0.04em",
+      justifySelf: "start",
+      marginLeft: 8, // 👈 small, intentional offset
+    }}
+  >
+    URBAN ODYSSEY
+  </div>
+
+  {/* Right icon */}
+  <Instagram
+    size={20}
+    style={{ justifySelf: "end" }}
+  />
+</div>
+
 		
 		{/* COLLECTION IMAGES (HORIZONTAL EDITORIAL STRIP) */}
 {latestCollection.image_urls.length > 0 && (
